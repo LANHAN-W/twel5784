@@ -287,7 +287,7 @@ h2 {
 }
 
 .card-front {
-  color: rgba(255, 255, 255, 0.92);
+  color: var(--card-text-color);
   background: var(--card-color);
 }
 
@@ -298,7 +298,8 @@ h2 {
   width: 148px;
   height: 148px;
   content: "";
-  border: 1px solid rgba(255, 255, 255, 0.38);
+  border: 1px solid currentColor;
+  opacity: 0.38;
   border-radius: 50%;
 }
 
@@ -322,7 +323,7 @@ h2 {
 
 .meaning-title {
   margin-bottom: 12px;
-  color: var(--card-color);
+  color: var(--card-text-color);
   font-size: 1.35rem;
   font-weight: 900;
 }

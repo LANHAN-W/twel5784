@@ -4,54 +4,63 @@ const defaultColorCards = [
   {
     name: "霧 sage",
     color: "#849884",
+    textColor: "#ffffff",
     title: "穩定拆解",
     meaning: "把大任務拆成可驗證的小步驟，讓智能工具每一次輸出都有明確方向。",
   },
   {
     name: "煙藍",
     color: "#73889c",
+    textColor: "#ffffff",
     title: "資料感知",
     meaning: "先看清脈絡、限制與素材，再決定模型、提示與工作流程。",
   },
   {
     name: "陶土",
     color: "#b79177",
+    textColor: "#ffffff",
     title: "快速原型",
     meaning: "用最短路徑做出可試玩的版本，讓想法早一點碰到真實回饋。",
   },
   {
     name: "灰玫瑰",
     color: "#a99090",
+    textColor: "#ffffff",
     title: "同理體驗",
     meaning: "從學生或使用者的角度設計互動，讓工具不只聰明，也好理解。",
   },
   {
     name: "石墨綠",
     color: "#5f6e68",
+    textColor: "#ffffff",
     title: "自動化流程",
     meaning: "把重複步驟交給系統處理，保留人的判斷力在關鍵選擇上。",
   },
   {
     name: "芥末金",
     color: "#b9a163",
+    textColor: "#ffffff",
     title: "評估迭代",
     meaning: "每次產出都要有檢查標準，讓修正不靠感覺，而是靠證據。",
   },
   {
     name: "粉灰紫",
     color: "#9d91a3",
+    textColor: "#ffffff",
     title: "創意轉譯",
     meaning: "把抽象概念轉成畫面、規則、故事或任務，讓學習變得可操作。",
   },
   {
     name: "暖米灰",
     color: "#aaa190",
+    textColor: "#ffffff",
     title: "協作溝通",
     meaning: "把需求、限制與回饋說清楚，讓人與智能工具形成順暢接力。",
   },
   {
     name: "霧松黑",
     color: "#56615d",
+    textColor: "#ffffff",
     title: "安全邊界",
     meaning: "辨識風險、保護資料、尊重來源，讓智能開發能被安心使用。",
   },
@@ -135,6 +144,8 @@ const colorCardPicker = document.querySelector("#colorCardPicker");
 const cardNameInput = document.querySelector("#cardNameInput");
 const cardColorInput = document.querySelector("#cardColorInput");
 const cardHexInput = document.querySelector("#cardHexInput");
+const cardTextColorInput = document.querySelector("#cardTextColorInput");
+const cardTextHexInput = document.querySelector("#cardTextHexInput");
 const cardTitleInput = document.querySelector("#cardTitleInput");
 const cardMeaningInput = document.querySelector("#cardMeaningInput");
 const colorSettingsForm = document.querySelector("#colorSettingsForm");
@@ -193,6 +204,7 @@ function sanitizeColorCard(card, fallback) {
   return {
     name: sanitizeText(card?.name, fallback.name),
     color: normalizeHex(card?.color) ?? fallback.color,
+    textColor: normalizeHex(card?.textColor) ?? fallback.textColor,
     title: sanitizeText(card?.title, fallback.title),
     meaning: sanitizeText(card?.meaning, fallback.meaning),
   };
@@ -225,6 +237,7 @@ function renderColorGrid() {
     const article = document.createElement("article");
     article.className = "flip-card";
     article.style.setProperty("--card-color", card.color);
+    article.style.setProperty("--card-text-color", card.textColor);
 
     const button = document.createElement("button");
     button.type = "button";
@@ -260,6 +273,7 @@ function renderColorGrid() {
     const backNumber = document.createElement("span");
     backNumber.className = "card-number";
     backNumber.textContent = card.name;
+    backNumber.style.color = card.textColor;
 
     front.append(frontNumber, colorName);
     backContent.append(title, meaning);
@@ -284,6 +298,7 @@ function renderColorSettings() {
     button.className = "picker-card";
     button.type = "button";
     button.style.setProperty("--picker-color", card.color);
+    button.style.color = card.textColor;
     button.classList.toggle("active", index === state.selectedColorIndex);
     button.setAttribute("aria-label", `編輯第 ${index + 1} 張：${card.name}`);
 
@@ -311,6 +326,8 @@ function syncColorForm() {
   cardNameInput.value = card.name;
   cardColorInput.value = card.color;
   cardHexInput.value = card.color;
+  cardTextColorInput.value = card.textColor;
+  cardTextHexInput.value = card.textColor;
   cardTitleInput.value = card.title;
   cardMeaningInput.value = card.meaning;
 }
@@ -759,6 +776,23 @@ cardHexInput.addEventListener("input", () => {
   }
   cardColorInput.value = color;
   updateSelectedColorCard({ color });
+});
+cardTextColorInput.addEventListener("input", () => {
+  const textColor = normalizeHex(cardTextColorInput.value);
+  if (!textColor) {
+    return;
+  }
+  cardTextHexInput.value = textColor;
+  updateSelectedColorCard({ textColor });
+});
+cardTextHexInput.addEventListener("input", () => {
+  const textColor = normalizeHex(cardTextHexInput.value);
+  if (!textColor) {
+    colorSaveState.textContent = "文字色碼需為 #RRGGBB";
+    return;
+  }
+  cardTextColorInput.value = textColor;
+  updateSelectedColorCard({ textColor });
 });
 cardTitleInput.addEventListener("input", () => {
   updateSelectedColorCard({ title: cardTitleInput.value.trim() || "未命名主題" });
