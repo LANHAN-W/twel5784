@@ -73,6 +73,23 @@ label {
   border-bottom: 1px solid var(--line);
 }
 
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.site-logo {
+  width: clamp(72px, 11vw, 116px);
+  aspect-ratio: 1;
+  object-fit: contain;
+  flex: 0 0 auto;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(217, 222, 216, 0.82);
+  border-radius: 8px;
+}
+
 .eyebrow {
   margin: 0 0 6px;
   color: var(--muted);
@@ -318,6 +335,9 @@ h2 {
 }
 
 .developer-credit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin: 18px 0 0;
   padding: 12px 14px;
   color: #52605b;
@@ -327,6 +347,16 @@ h2 {
   font-size: 0.92rem;
   font-weight: 800;
   line-height: 1.5;
+}
+
+.developer-credit img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  flex: 0 0 auto;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(217, 222, 216, 0.82);
+  border-radius: 8px;
 }
 
 .color-settings {
@@ -736,6 +766,10 @@ output {
     flex-direction: column;
   }
 
+  .brand-lockup {
+    align-items: flex-start;
+  }
+
   .tabs,
   .actions {
     width: 100%;
@@ -788,6 +822,15 @@ output {
 
   .tab-button {
     white-space: normal;
+  }
+
+  .brand-lockup,
+  .developer-credit {
+    align-items: flex-start;
+  }
+
+  .site-logo {
+    width: 72px;
   }
 
   .actions {
