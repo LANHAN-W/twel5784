@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>智能開發小遊戲</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">AI Learning Studio</p>
+          <h1>智能開發小遊戲</h1>
+        </div>
+        <nav class="tabs" aria-label="遊戲切換">
+          <button class="tab-button active" type="button" data-tab="colorGame">
+            <span aria-hidden="true">▦</span>
+            顏色九宮格
+          </button>
+          <button class="tab-button" type="button" data-tab="memoryGame">
+            <span aria-hidden="true">◫</span>
+            圖卡對對碰
+          </button>
+        </nav>
+      </header>
+
+      <section class="game-panel active" id="colorGame" aria-labelledby="colorGameTitle">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Morandi Palette</p>
+            <h2 id="colorGameTitle">九種智能開發能力</h2>
+          </div>
+          <div class="actions">
+            <button class="primary-button" type="button" id="toggleColorSettings" aria-expanded="false" aria-controls="colorSettings">
+              <span aria-hidden="true">⚙</span>
+              設定
+            </button>
+            <button class="icon-button" type="button" id="resetColors" aria-label="重置顏色九宮格" title="重置">
+              ↻
+            </button>
+          </div>
+        </div>
+
+        <div class="color-grid" id="colorGrid" aria-live="polite"></div>
+
+        <section class="color-settings" id="colorSettings" aria-labelledby="colorSettingsTitle" hidden>
+          <div class="settings-header">
+            <div>
+              <p class="eyebrow">Card Editor</p>
+              <h3 id="colorSettingsTitle">顏色與說明設定</h3>
+            </div>
+            <span class="save-state" id="colorSaveState">自動儲存</span>
+          </div>
+
+          <div class="settings-layout">
+            <div class="card-picker" id="colorCardPicker" aria-label="選擇要編輯的色卡"></div>
+
+            <form class="settings-form" id="colorSettingsForm">
+              <label class="field">
+                <span>卡片正面名稱</span>
+                <input id="cardNameInput" type="text" maxlength="18" autocomplete="off" />
+              </label>
+
+              <div class="field-group">
+                <label class="field">
+                  <span>卡片顏色</span>
+                  <input id="cardColorInput" type="color" />
+                </label>
+                <label class="field">
+                  <span>色碼</span>
+                  <input id="cardHexInput" type="text" maxlength="7" autocomplete="off" spellcheck="false" />
+                </label>
+              </div>
+
+              <label class="field">
+                <span>翻面標題</span>
+                <input id="cardTitleInput" type="text" maxlength="24" autocomplete="off" />
+              </label>
+
+              <label class="field">
+                <span>翻面說明</span>
+                <textarea id="cardMeaningInput" rows="4" maxlength="120"></textarea>
+              </label>
+
+              <div class="form-actions">
+                <button class="secondary-button" type="button" id="restoreDefaultColors">恢復預設</button>
+                <button class="primary-button" type="button" id="closeColorSettings">完成</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <p class="developer-credit">開發者：社團法人臺灣專長培訓及友善生活推廣發展協會</p>
+      </section>
+
+      <section class="game-panel" id="memoryGame" aria-labelledby="memoryGameTitle">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Visual Memory</p>
+            <h2 id="memoryGameTitle">學生圖卡記憶對對碰</h2>
+          </div>
+          <div class="actions">
+            <input id="imageUpload" class="file-input" type="file" accept="image/*" multiple />
+            <label class="primary-button" for="imageUpload">
+              <span aria-hidden="true">＋</span>
+              加入圖片
+            </label>
+            <button class="icon-button" type="button" id="resetMemory" aria-label="重置對對碰" title="重置">
+              ↻
+            </button>
+          </div>
+        </div>
+
+        <div class="memory-layout">
+          <aside class="setup-panel" aria-label="圖卡設定">
+            <div class="counter-strip">
+              <div>
+                <span class="metric" id="imageCount">0</span>
+                <span class="metric-label">張圖片</span>
+              </div>
+              <div>
+                <span class="metric" id="matchCount">0</span>
+                <span class="metric-label">組完成</span>
+              </div>
+            </div>
+
+            <label class="control-label" for="pairRange">出題組數</label>
+            <div class="range-row">
+              <input id="pairRange" type="range" min="2" max="2" value="2" />
+              <output id="pairOutput" for="pairRange">2</output>
+            </div>
+
+            <div class="preview-grid" id="previewGrid" aria-label="已加入圖片"></div>
+
+            <button class="start-button" type="button" id="startMemory" disabled>
+              開始遊戲
+            </button>
+            <button class="secondary-button peek-button" type="button" id="peekMemory" disabled>
+              偷看 10 秒
+            </button>
+          </aside>
+
+          <div class="memory-board-wrap">
+            <div class="status-bar">
+              <span id="memoryStatus">加入至少 2 張圖片</span>
+              <span id="attemptCount">0 次翻牌</span>
+            </div>
+            <div class="memory-board" id="memoryBoard" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <p class="developer-credit">開發者：社團法人臺灣專長培訓及友善生活推廣發展協會</p>
+      </section>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
