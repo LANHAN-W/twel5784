@@ -25,6 +25,10 @@
             <span aria-hidden="true">◫</span>
             圖卡對對碰
           </button>
+          <button class="tab-button" type="button" data-tab="handShadowGame">
+            <span aria-hidden="true">◩</span>
+            手影猜猜樂
+          </button>
         </nav>
       </header>
 
@@ -154,6 +158,61 @@
             </div>
             <div class="memory-board" id="memoryBoard" aria-live="polite"></div>
           </div>
+        </div>
+
+        <p class="developer-credit">
+          <img src="./assets/logo.png" alt="" aria-hidden="true" />
+          <span>開發者：社團法人臺灣專長培訓及友善生活推廣發展協會</span>
+        </p>
+      </section>
+
+      <section class="game-panel" id="handShadowGame" aria-labelledby="handShadowGameTitle">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Shadow Guess</p>
+            <h2 id="handShadowGameTitle">手影猜猜樂</h2>
+          </div>
+          <div class="actions">
+            <button class="primary-button" type="button" id="nextShadowQuestion">
+              下一題
+            </button>
+            <button class="icon-button" type="button" id="resetShadowGame" aria-label="重置手影猜猜樂" title="重置">
+              ↻
+            </button>
+          </div>
+        </div>
+
+        <div class="shadow-game-layout">
+          <section class="shadow-card-stage" aria-live="polite">
+            <div class="shadow-flip-card" id="shadowFlipCard">
+              <div class="shadow-flip-inner">
+                <figure class="shadow-face shadow-question">
+                  <img id="shadowImage" src="" alt="" />
+                  <figcaption id="shadowPrompt">這是什麼手影？</figcaption>
+                </figure>
+                <figure class="shadow-face shadow-answer">
+                  <img id="gestureImage" src="" alt="" />
+                  <figcaption id="gestureCaption"></figcaption>
+                </figure>
+              </div>
+            </div>
+          </section>
+
+          <aside class="shadow-control-panel">
+            <div class="counter-strip">
+              <div>
+                <span class="metric" id="shadowScore">0</span>
+                <span class="metric-label">答對</span>
+              </div>
+              <div>
+                <span class="metric" id="shadowRound">1</span>
+                <span class="metric-label">題目</span>
+              </div>
+            </div>
+
+            <div class="shadow-options" id="shadowOptions" aria-label="手影答案選項"></div>
+            <p class="shadow-feedback" id="shadowFeedback">請選一個答案</p>
+          </aside>
         </div>
 
         <p class="developer-credit">

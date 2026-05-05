@@ -57,6 +57,54 @@ const defaultColorCards = [
   },
 ];
 
+const handShadowItems = [
+  {
+    answer: "松鼠",
+    shadow: "./assets/手影/松鼠-剪影.png",
+    gesture: "./assets/手勢/松鼠-手勢.png",
+  },
+  {
+    answer: "印地安",
+    shadow: "./assets/手影/印地安-剪影.png",
+    gesture: "./assets/手勢/印地安-手勢.png",
+  },
+  {
+    answer: "蝸牛",
+    shadow: "./assets/手影/蝸牛-剪影.png",
+    gesture: "./assets/手勢/蝸牛-手勢.png",
+  },
+  {
+    answer: "鹿",
+    shadow: "./assets/手影/鹿-剪影.png",
+    gesture: "./assets/手勢/鹿-手勢.png",
+  },
+  {
+    answer: "螃蟹",
+    shadow: "./assets/手影/螃蟹-剪影.png",
+    gesture: "./assets/手勢/螃蟹-手勢.png",
+  },
+  {
+    answer: "兔子",
+    shadow: "./assets/手影/兔子-剪影.png",
+    gesture: "./assets/手勢/兔-手勢.png",
+  },
+  {
+    answer: "鴿子",
+    shadow: "./assets/手影/鴿子-剪影.png",
+    gesture: "./assets/手勢/鴿子-手勢.png",
+  },
+  {
+    answer: "狗",
+    shadow: "./assets/手影/狗-剪影.png",
+    gesture: "./assets/手勢/狗-手勢.png",
+  },
+  {
+    answer: "鱷魚",
+    shadow: "./assets/手影/鱷魚-剪影.png",
+    gesture: "./assets/手勢/鱷魚-手勢.png",
+  },
+];
+
 const state = {
   colorCards: loadColorCards(),
   selectedColorIndex: 0,
@@ -70,6 +118,10 @@ const state = {
   peekIntervalId: null,
   matches: 0,
   attempts: 0,
+  shadowCurrent: null,
+  shadowScore: 0,
+  shadowRound: 0,
+  shadowAnswered: false,
 };
 
 const tabs = document.querySelectorAll(".tab-button");
@@ -100,6 +152,17 @@ const resetMemory = document.querySelector("#resetMemory");
 const memoryBoard = document.querySelector("#memoryBoard");
 const memoryStatus = document.querySelector("#memoryStatus");
 const attemptCount = document.querySelector("#attemptCount");
+const nextShadowQuestion = document.querySelector("#nextShadowQuestion");
+const resetShadowGame = document.querySelector("#resetShadowGame");
+const shadowFlipCard = document.querySelector("#shadowFlipCard");
+const shadowImage = document.querySelector("#shadowImage");
+const shadowPrompt = document.querySelector("#shadowPrompt");
+const gestureImage = document.querySelector("#gestureImage");
+const gestureCaption = document.querySelector("#gestureCaption");
+const shadowOptions = document.querySelector("#shadowOptions");
+const shadowFeedback = document.querySelector("#shadowFeedback");
+const shadowScore = document.querySelector("#shadowScore");
+const shadowRound = document.querySelector("#shadowRound");
 
 function createId() {
   if (globalThis.crypto?.randomUUID) {
@@ -584,6 +647,79 @@ function updatePeekButton(remainingSeconds = 10) {
   peekMemory.textContent = state.isPeeking ? `偷看 ${remainingSeconds} 秒` : "偷看 10 秒";
 }
 
+function showNextShadowQuestion() {
+  const previousAnswer = state.shadowCurrent?.answer;
+  const candidates = handShadowItems.filter((item) => item.answer !== previousAnswer);
+  state.shadowCurrent = shuffle(candidates.length ? candidates : handShadowItems)[0];
+  state.shadowRound += 1;
+  state.shadowAnswered = false;
+
+  renderShadowQuestion();
+}
+
+function renderShadowQuestion() {
+  const current = state.shadowCurrent;
+  const options = buildShadowOptions(current.answer);
+
+  shadowFlipCard.classList.remove("revealed");
+  shadowImage.src = current.shadow;
+  shadowImage.alt = `${current.answer}手影`;
+  shadowPrompt.textContent = "這是什麼手影？";
+  gestureImage.src = current.gesture;
+  gestureImage.alt = `${current.answer}手勢`;
+  gestureCaption.textContent = `${current.answer}的手勢`;
+  shadowScore.textContent = state.shadowScore;
+  shadowRound.textContent = state.shadowRound;
+  shadowFeedback.textContent = "請選一個答案";
+
+  shadowOptions.innerHTML = "";
+  options.forEach((answer) => {
+    const button = document.createElement("button");
+    button.className = "answer-button";
+    button.type = "button";
+    button.textContent = answer;
+    button.addEventListener("click", () => checkShadowAnswer(button, answer));
+    shadowOptions.append(button);
+  });
+}
+
+function buildShadowOptions(correctAnswer) {
+  const distractors = handShadowItems
+    .filter((item) => item.answer !== correctAnswer)
+    .map((item) => item.answer);
+  return shuffle([correctAnswer, ...shuffle(distractors).slice(0, 2)]);
+}
+
+function checkShadowAnswer(button, answer) {
+  if (state.shadowAnswered) {
+    return;
+  }
+
+  if (answer !== state.shadowCurrent.answer) {
+    button.classList.add("wrong");
+    button.disabled = true;
+    shadowFeedback.textContent = "再猜一次";
+    return;
+  }
+
+  state.shadowAnswered = true;
+  state.shadowScore += 1;
+  shadowScore.textContent = state.shadowScore;
+  shadowFeedback.textContent = "答對了";
+  shadowFlipCard.classList.add("revealed");
+
+  document.querySelectorAll(".answer-button").forEach((item) => {
+    item.disabled = true;
+    item.classList.toggle("correct", item.textContent === answer);
+  });
+}
+
+function resetHandShadowGame() {
+  state.shadowScore = 0;
+  state.shadowRound = 0;
+  showNextShadowQuestion();
+}
+
 function shuffle(items) {
   const next = [...items];
   for (let index = next.length - 1; index > 0; index -= 1) {
@@ -640,7 +776,10 @@ pairRange.addEventListener("input", () => {
 startMemory.addEventListener("click", startGame);
 peekMemory.addEventListener("click", peekAllCards);
 resetMemory.addEventListener("click", resetMemoryGame);
+nextShadowQuestion.addEventListener("click", showNextShadowQuestion);
+resetShadowGame.addEventListener("click", resetHandShadowGame);
 
 renderColorGrid();
 renderMemoryBoard();
 updateSetup();
+resetHandShadowGame();
