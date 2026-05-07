@@ -39,7 +39,7 @@
           </button>
           <button class="tab-button" type="button" data-tab="cityGuessGame">
             <span aria-hidden="true">⌖</span>
-            縣市猜猜
+            猜猜我是誰
           </button>
         </nav>
       </header>
@@ -390,12 +390,12 @@
       <section class="game-panel" id="cityGuessGame" aria-labelledby="cityGuessGameTitle">
         <div class="section-head">
           <div>
-            <p class="eyebrow">City Guess</p>
+            <p class="eyebrow">Guess Who</p>
             <h2 id="cityGuessGameTitle">猜猜我是誰</h2>
           </div>
           <div class="actions">
             <button class="primary-button" type="button" id="nextCityQuestion">抽一題</button>
-            <button class="icon-button" type="button" id="resetCityGuess" aria-label="重置縣市猜猜我是誰" title="重置">
+            <button class="icon-button" type="button" id="resetCityGuess" aria-label="重置猜猜我是誰" title="重置">
               ↻
             </button>
           </div>
@@ -405,7 +405,7 @@
           <section class="city-stage" id="cityStage" aria-live="polite">
             <div class="city-card">
               <div class="city-card-topline">
-                <span id="cityRegionLabel">請選擇挑戰的縣市</span>
+                <span id="cityRegionLabel">請選擇挑戰主題</span>
                 <span id="cityRoundLabel">第 1 題</span>
               </div>
               <div class="city-mystery">
@@ -413,7 +413,7 @@
                 <strong id="cityMysteryTitle">猜猜我是誰</strong>
                 <p id="cityHintText">按下抽一題後，觀察四個線索再選答案。</p>
               </div>
-              <div class="city-clues" id="cityClues" aria-label="縣市線索"></div>
+              <div class="city-clues" id="cityClues" aria-label="題目線索"></div>
               <div class="city-reveal" id="cityReveal" hidden>
                 <span>答案</span>
                 <strong id="cityAnswerName"></strong>
@@ -435,18 +435,32 @@
             </div>
 
             <label class="field">
-              <span>挑戰範圍</span>
+              <span>主題類別</span>
               <select id="cityRegionSelect">
-                <option value="all">全臺縣市</option>
-                <option value="north">北部</option>
-                <option value="central">中部</option>
-                <option value="south">南部</option>
-                <option value="east">東部</option>
-                <option value="island">離島</option>
+                <option value="all">全部主題</option>
+                <option value="city">臺灣縣市</option>
+                <option value="animal">動物</option>
+                <option value="job">職業</option>
+                <option value="object">生活用品</option>
+                <option value="custom">自訂題庫</option>
               </select>
             </label>
 
-            <div class="city-options" id="cityOptions" aria-label="縣市答案選項"></div>
+            <label class="field">
+              <span>自訂題庫</span>
+              <textarea
+                id="customGuessInput"
+                rows="5"
+                placeholder="答案｜線索一,線索二,線索三,線索四｜答案說明"
+              ></textarea>
+            </label>
+            <div class="custom-guess-tools">
+              <button class="secondary-button" type="button" id="saveCustomGuess">儲存題庫</button>
+              <button class="secondary-button" type="button" id="clearCustomGuess">清除</button>
+            </div>
+            <span class="save-state" id="customGuessStatus">尚未建立自訂題庫</span>
+
+            <div class="city-options" id="cityOptions" aria-label="答案選項"></div>
             <p class="shadow-feedback" id="cityFeedback">先抽一題開始挑戰</p>
           </aside>
         </div>

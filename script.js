@@ -1,4 +1,5 @@
 const COLOR_STORAGE_KEY = "ai-dev-color-cards";
+const CUSTOM_GUESS_STORAGE_KEY = "ai-dev-custom-guess-items";
 
 const defaultColorCards = [
   {
@@ -323,6 +324,141 @@ const cityGuessItems = [
   },
 ];
 
+const themedGuessItems = [
+  {
+    answer: "長頸鹿",
+    theme: "animal",
+    note: "長頸鹿有很長的脖子，常用來吃高處的樹葉，也是辨識度很高的草食動物。",
+    clues: [
+      { icon: "頸", label: "長脖子" },
+      { icon: "斑", label: "斑紋" },
+      { icon: "葉", label: "吃樹葉" },
+      { icon: "高", label: "很高" },
+    ],
+  },
+  {
+    answer: "企鵝",
+    theme: "animal",
+    note: "企鵝不會飛，但很會游泳，黑白外型與搖擺走路是常見特色。",
+    clues: [
+      { icon: "冰", label: "寒冷" },
+      { icon: "黑", label: "黑白" },
+      { icon: "游", label: "游泳" },
+      { icon: "搖", label: "搖擺走路" },
+    ],
+  },
+  {
+    answer: "蝴蝶",
+    theme: "animal",
+    note: "蝴蝶有漂亮翅膀，從毛毛蟲蛻變而來，也常出現在花叢間。",
+    clues: [
+      { icon: "翼", label: "翅膀" },
+      { icon: "花", label: "花叢" },
+      { icon: "變", label: "蛻變" },
+      { icon: "粉", label: "鱗粉" },
+    ],
+  },
+  {
+    answer: "海豚",
+    theme: "animal",
+    note: "海豚生活在海中，會跳出水面，也常被認為聰明且善於互動。",
+    clues: [
+      { icon: "海", label: "海洋" },
+      { icon: "躍", label: "跳躍" },
+      { icon: "聲", label: "聲音溝通" },
+      { icon: "智", label: "聰明" },
+    ],
+  },
+  {
+    answer: "醫師",
+    theme: "job",
+    note: "醫師會診斷疾病、提供治療建議，也常和護理師及其他專業人員合作。",
+    clues: [
+      { icon: "聽", label: "聽診器" },
+      { icon: "診", label: "診斷" },
+      { icon: "院", label: "醫院" },
+      { icon: "藥", label: "藥物" },
+    ],
+  },
+  {
+    answer: "廚師",
+    theme: "job",
+    note: "廚師負責料理食物，常使用鍋具、刀具和各種食材創造菜色。",
+    clues: [
+      { icon: "鍋", label: "鍋具" },
+      { icon: "刀", label: "刀工" },
+      { icon: "菜", label: "食材" },
+      { icon: "香", label: "香味" },
+    ],
+  },
+  {
+    answer: "消防員",
+    theme: "job",
+    note: "消防員會救災、救護與滅火，需要快速反應並保護民眾安全。",
+    clues: [
+      { icon: "火", label: "滅火" },
+      { icon: "車", label: "消防車" },
+      { icon: "帽", label: "安全帽" },
+      { icon: "救", label: "救援" },
+    ],
+  },
+  {
+    answer: "老師",
+    theme: "job",
+    note: "老師陪伴學生學習，會設計課程、引導討論並協助理解知識。",
+    clues: [
+      { icon: "書", label: "課本" },
+      { icon: "板", label: "黑板" },
+      { icon: "問", label: "提問" },
+      { icon: "學", label: "學習" },
+    ],
+  },
+  {
+    answer: "雨傘",
+    theme: "object",
+    note: "雨傘可以遮雨也能遮陽，是日常生活中很常見的外出用品。",
+    clues: [
+      { icon: "雨", label: "下雨" },
+      { icon: "遮", label: "遮蔽" },
+      { icon: "柄", label: "握把" },
+      { icon: "開", label: "撐開" },
+    ],
+  },
+  {
+    answer: "鬧鐘",
+    theme: "object",
+    note: "鬧鐘會在設定時間提醒人起床或做事，是時間管理的日常物品。",
+    clues: [
+      { icon: "時", label: "時間" },
+      { icon: "鈴", label: "鈴聲" },
+      { icon: "醒", label: "起床" },
+      { icon: "設", label: "設定" },
+    ],
+  },
+  {
+    answer: "鑰匙",
+    theme: "object",
+    note: "鑰匙用來開鎖，常和門、家、保管與安全感連在一起。",
+    clues: [
+      { icon: "門", label: "開門" },
+      { icon: "鎖", label: "鎖孔" },
+      { icon: "家", label: "回家" },
+      { icon: "串", label: "鑰匙圈" },
+    ],
+  },
+  {
+    answer: "眼鏡",
+    theme: "object",
+    note: "眼鏡能幫助看得更清楚，也可以保護眼睛或成為造型配件。",
+    clues: [
+      { icon: "眼", label: "眼睛" },
+      { icon: "鏡", label: "鏡片" },
+      { icon: "清", label: "清楚" },
+      { icon: "框", label: "鏡框" },
+    ],
+  },
+];
+
 const state = {
   colorCards: loadColorCards(),
   selectedColorIndex: 0,
@@ -359,6 +495,8 @@ const state = {
   cityScore: 0,
   cityRound: 0,
   cityAnswered: false,
+  customGuessRaw: loadCustomGuessText(),
+  customGuessItems: [],
 };
 
 const tabs = document.querySelectorAll(".tab-button");
@@ -447,6 +585,10 @@ const cityAnswerNote = document.querySelector("#cityAnswerNote");
 const cityScore = document.querySelector("#cityScore");
 const cityRound = document.querySelector("#cityRound");
 const cityRegionSelect = document.querySelector("#cityRegionSelect");
+const customGuessInput = document.querySelector("#customGuessInput");
+const saveCustomGuess = document.querySelector("#saveCustomGuess");
+const clearCustomGuess = document.querySelector("#clearCustomGuess");
+const customGuessStatus = document.querySelector("#customGuessStatus");
 const cityOptions = document.querySelector("#cityOptions");
 const cityFeedback = document.querySelector("#cityFeedback");
 
@@ -468,6 +610,14 @@ function loadColorCards() {
     return defaultColorCards.map((fallback, index) => sanitizeColorCard(saved[index], fallback));
   } catch {
     return cloneDefaultColors();
+  }
+}
+
+function loadCustomGuessText() {
+  try {
+    return localStorage.getItem(CUSTOM_GUESS_STORAGE_KEY) ?? "";
+  } catch {
+    return "";
   }
 }
 
@@ -1275,6 +1425,11 @@ function setCountdownButtons(mode) {
 
 function showNextCityQuestion() {
   const pool = getCityPool();
+  if (!pool.length) {
+    cityFeedback.textContent = "請先儲存至少一題自訂題庫";
+    return;
+  }
+
   const previousAnswer = state.cityCurrent?.answer;
   const candidates = pool.filter((item) => item.answer !== previousAnswer);
   state.cityCurrent = shuffle(candidates.length ? candidates : pool)[0];
@@ -1284,9 +1439,22 @@ function showNextCityQuestion() {
 }
 
 function getCityPool() {
-  const region = cityRegionSelect.value;
-  const pool = region === "all" ? cityGuessItems : cityGuessItems.filter((item) => item.region === region);
-  return pool.length ? pool : cityGuessItems;
+  const theme = cityRegionSelect.value;
+  const builtInItems = getBuiltInGuessItems();
+  if (theme === "custom") {
+    return state.customGuessItems;
+  }
+  if (theme === "all") {
+    return [...builtInItems, ...state.customGuessItems];
+  }
+  return builtInItems.filter((item) => item.theme === theme);
+}
+
+function getBuiltInGuessItems() {
+  return [
+    ...cityGuessItems.map((item) => ({ ...item, theme: "city" })),
+    ...themedGuessItems,
+  ];
 }
 
 function renderCityQuestion() {
@@ -1296,7 +1464,7 @@ function renderCityQuestion() {
   cityRegionLabel.textContent = getCityRegionLabel(cityRegionSelect.value);
   cityRoundLabel.textContent = `第 ${state.cityRound} 題`;
   cityMysteryTitle.textContent = "猜猜我是誰";
-  cityHintText.textContent = "觀察四個線索，選出最可能的縣市。";
+  cityHintText.textContent = "觀察四個線索，選出最可能的答案。";
   cityScore.textContent = state.cityScore;
   cityRound.textContent = state.cityRound;
   cityFeedback.textContent = "請選一個答案";
@@ -1335,7 +1503,7 @@ function buildCityOptions(correctAnswer) {
   const regionPool = getCityPool()
     .filter((item) => item.answer !== correctAnswer)
     .map((item) => item.answer);
-  const fallbackPool = cityGuessItems
+  const fallbackPool = [...getBuiltInGuessItems(), ...state.customGuessItems]
     .filter((item) => item.answer !== correctAnswer && !regionPool.includes(item.answer))
     .map((item) => item.answer);
   return shuffle([correctAnswer, ...shuffle([...regionPool, ...fallbackPool]).slice(0, 3)]);
@@ -1371,14 +1539,96 @@ function checkCityAnswer(button, answer) {
 
 function getCityRegionLabel(region) {
   const labels = {
-    all: "全臺縣市",
-    north: "北部挑戰",
-    central: "中部挑戰",
-    south: "南部挑戰",
-    east: "東部挑戰",
-    island: "離島挑戰",
+    all: "全部主題",
+    city: "臺灣縣市",
+    animal: "動物主題",
+    job: "職業主題",
+    object: "生活用品",
+    custom: "自訂題庫",
   };
   return labels[region] ?? labels.all;
+}
+
+function parseCustomGuessText(text) {
+  return String(text ?? "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [answerPart, cluesPart, notePart] = line.split(/[|｜]/).map((part) => part.trim());
+      const answer = sanitizeText(answerPart, "");
+      const clueLabels = String(cluesPart ?? "")
+        .split(/[，,、]/)
+        .map((clue) => clue.trim())
+        .filter(Boolean)
+        .slice(0, 4);
+
+      if (!answer || clueLabels.length < 2) {
+        return null;
+      }
+
+      const paddedClues = [...clueLabels];
+      while (paddedClues.length < 4) {
+        paddedClues.push("補充線索");
+      }
+
+      return {
+        answer,
+        theme: "custom",
+        note: sanitizeText(notePart, "這是自訂題庫中的題目，可以依照課程需求調整說明。"),
+        clues: paddedClues.map((label) => ({
+          icon: label.slice(0, 1),
+          label,
+        })),
+      };
+    })
+    .filter(Boolean);
+}
+
+function initCustomGuessSettings() {
+  customGuessInput.value = state.customGuessRaw;
+  state.customGuessItems = parseCustomGuessText(state.customGuessRaw);
+  updateCustomGuessStatus();
+}
+
+function saveCustomGuessItems() {
+  const raw = customGuessInput.value.trim();
+  const items = parseCustomGuessText(raw);
+  if (raw && !items.length) {
+    customGuessStatus.textContent = "格式需為：答案｜線索1,線索2｜說明";
+    return;
+  }
+
+  state.customGuessRaw = raw;
+  state.customGuessItems = items;
+  try {
+    localStorage.setItem(CUSTOM_GUESS_STORAGE_KEY, raw);
+  } catch {
+    customGuessStatus.textContent = "本次無法儲存";
+    return;
+  }
+
+  updateCustomGuessStatus();
+  resetCityGuessGame();
+}
+
+function clearCustomGuessItems() {
+  state.customGuessRaw = "";
+  state.customGuessItems = [];
+  customGuessInput.value = "";
+  try {
+    localStorage.removeItem(CUSTOM_GUESS_STORAGE_KEY);
+  } catch {
+    customGuessStatus.textContent = "已清除，未寫入儲存";
+  }
+  updateCustomGuessStatus();
+  resetCityGuessGame();
+}
+
+function updateCustomGuessStatus() {
+  customGuessStatus.textContent = state.customGuessItems.length
+    ? `已建立 ${state.customGuessItems.length} 題自訂題庫`
+    : "尚未建立自訂題庫";
 }
 
 function resetCityGuessGame() {
@@ -1389,7 +1639,7 @@ function resetCityGuessGame() {
   cityScore.textContent = "0";
   cityRound.textContent = "0";
   cityRoundLabel.textContent = "第 1 題";
-  cityRegionLabel.textContent = "請選擇挑戰的縣市";
+  cityRegionLabel.textContent = "請選擇挑戰主題";
   cityMysteryTitle.textContent = "猜猜我是誰";
   cityHintText.textContent = "按下抽一題後，觀察四個線索再選答案。";
   cityReveal.hidden = true;
@@ -1487,6 +1737,8 @@ countdownRetry.addEventListener("click", retryCountdownQuestion);
 nextCityQuestion.addEventListener("click", showNextCityQuestion);
 resetCityGuess.addEventListener("click", resetCityGuessGame);
 cityRegionSelect.addEventListener("change", resetCityGuessGame);
+saveCustomGuess.addEventListener("click", saveCustomGuessItems);
+clearCustomGuess.addEventListener("click", clearCustomGuessItems);
 
 renderColorGrid();
 renderMemoryBoard();
@@ -1494,4 +1746,5 @@ updateSetup();
 resetHandShadowGame();
 initBombGame();
 initCountdownGame();
+initCustomGuessSettings();
 resetCityGuessGame();
