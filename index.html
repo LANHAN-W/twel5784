@@ -29,6 +29,14 @@
             <span aria-hidden="true">◩</span>
             手影猜猜樂
           </button>
+          <button class="tab-button" type="button" data-tab="bombGame">
+            <span aria-hidden="true">●</span>
+            聯想炸彈
+          </button>
+          <button class="tab-button" type="button" data-tab="countdownGame">
+            <span aria-hidden="true">◷</span>
+            倒數挑戰
+          </button>
         </nav>
       </header>
 
@@ -224,6 +232,149 @@
             <div class="shadow-options" id="shadowOptions" aria-label="手影答案選項"></div>
             <p class="shadow-feedback" id="shadowFeedback">請選一個答案</p>
           </aside>
+        </div>
+
+        <p class="developer-credit">
+          <img src="./assets/logo.png" alt="" aria-hidden="true" />
+          <span>開發者：社團法人臺灣專長培訓及友善生活推廣發展協會</span>
+        </p>
+      </section>
+
+      <section class="game-panel" id="bombGame" aria-labelledby="bombGameTitle">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Association Bomb</p>
+            <h2 id="bombGameTitle">聯想炸彈</h2>
+          </div>
+          <div class="actions">
+            <button class="primary-button" type="button" id="bombNewTopic">隨機出題</button>
+            <button class="icon-button" type="button" id="bombReset" aria-label="重置聯想炸彈" title="重置">
+              ↻
+            </button>
+          </div>
+        </div>
+
+        <div class="bomb-layout">
+          <section class="bomb-stage" id="bombStage" aria-live="polite">
+            <div class="bomb-status-row">
+              <span id="bombStatus">Ready</span>
+              <span id="bombDebugTime">-- 秒</span>
+            </div>
+            <div class="bomb-visual" id="bombVisual" aria-hidden="true">
+              <span class="bomb-fuse"></span>
+              <span class="bomb-core">●</span>
+            </div>
+            <div class="topic-box">
+              <span>當前聯想主題</span>
+              <strong id="bombTopicText">請點擊隨機出題</strong>
+            </div>
+            <div class="bomb-actions">
+              <button class="start-button" type="button" id="bombStart" disabled>啟動炸彈</button>
+            </div>
+            <div class="bomb-result" id="bombResult" hidden>
+              <strong>BOOM!</strong>
+              <span id="bombPenaltyText"></span>
+            </div>
+          </section>
+
+          <aside class="game-config-panel">
+            <label class="field">
+              <span>題目清單，以逗號隔開</span>
+              <textarea id="bombTopicsInput" rows="5"></textarea>
+            </label>
+            <div class="field-group">
+              <label class="field">
+                <span>最短秒數</span>
+                <input id="bombMinInput" type="number" min="3" value="15" />
+              </label>
+              <label class="field">
+                <span>最長秒數</span>
+                <input id="bombMaxInput" type="number" min="4" value="35" />
+              </label>
+            </div>
+            <label class="field">
+              <span>爆炸任務，一列一個</span>
+              <textarea id="bombPenaltiesInput" rows="5"></textarea>
+            </label>
+          </aside>
+        </div>
+
+        <p class="developer-credit">
+          <img src="./assets/logo.png" alt="" aria-hidden="true" />
+          <span>開發者：社團法人臺灣專長培訓及友善生活推廣發展協會</span>
+        </p>
+      </section>
+
+      <section class="game-panel" id="countdownGame" aria-labelledby="countdownGameTitle">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Countdown Challenge</p>
+            <h2 id="countdownGameTitle">極限聯想倒數挑戰</h2>
+          </div>
+          <div class="actions">
+            <button class="primary-button" type="button" id="countdownStartSet">開始挑戰</button>
+            <button class="icon-button" type="button" id="countdownResetAll" aria-label="重置倒數挑戰" title="重置">
+              ↻
+            </button>
+          </div>
+        </div>
+
+        <div class="countdown-layout">
+          <aside class="game-config-panel">
+            <label class="field">
+              <span>題目列表，一列一題</span>
+              <textarea id="countdownQuestionsInput" rows="8"></textarea>
+            </label>
+            <div class="field-group">
+              <label class="field">
+                <span>秒數</span>
+                <input id="countdownSecondsInput" type="number" min="5" value="15" />
+              </label>
+              <label class="field">
+                <span>出題順序</span>
+                <select id="countdownOrderInput">
+                  <option value="random">隨機</option>
+                  <option value="sequential">順序</option>
+                </select>
+              </label>
+            </div>
+            <div class="field-group">
+              <label class="field">
+                <span>目標最少</span>
+                <input id="countdownTargetMin" type="number" min="1" value="3" />
+              </label>
+              <label class="field">
+                <span>目標最多</span>
+                <input id="countdownTargetMax" type="number" min="1" value="5" />
+              </label>
+            </div>
+            <label class="check-row">
+              <input id="countdownRepeatInput" type="checkbox" />
+              題目可重複出現
+            </label>
+          </aside>
+
+          <section class="countdown-stage" id="countdownStage" aria-live="polite">
+            <div class="countdown-topline">
+              <span id="countdownProgress">1 / 1</span>
+              <span id="countdownTimer">15.0 秒</span>
+            </div>
+            <div class="countdown-meter">
+              <div class="countdown-meter-fill" id="countdownMeterFill"></div>
+            </div>
+            <div class="countdown-question" id="countdownQuestion">準備</div>
+            <div class="countdown-target">
+              <span>聯想目標</span>
+              <strong id="countdownTarget">5</strong>
+            </div>
+            <div class="countdown-actions">
+              <button class="start-button" type="button" id="countdownRun">開始</button>
+              <button class="primary-button" type="button" id="countdownDone" hidden>我完成了</button>
+              <button class="secondary-button" type="button" id="countdownNext" hidden>下一題</button>
+              <button class="secondary-button" type="button" id="countdownRetry" hidden>重來</button>
+            </div>
+            <p class="shadow-feedback" id="countdownFeedback">設定完成後開始挑戰</p>
+          </section>
         </div>
 
         <p class="developer-credit">

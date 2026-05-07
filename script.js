@@ -114,6 +114,36 @@ const handShadowItems = [
   },
 ];
 
+const defaultBombTopics = [
+  "會讓人想到春天的東西",
+  "可以在廚房看到的物品",
+  "適合送禮的東西",
+  "圓形的食物",
+  "需要兩個人一起做的事",
+  "會發出聲音的東西",
+  "搭車時會看到的景物",
+  "讓人放鬆的活動",
+];
+
+const defaultBombPenalties = [
+  "分享一個今天想到的好點子",
+  "用三個詞形容剛剛的題目",
+  "做一個簡短的手勢讓大家猜",
+  "說出一個和題目相反的答案",
+  "邀請下一位同學接續回答",
+];
+
+const defaultCountdownQuestions = [
+  "水果名稱",
+  "交通工具",
+  "日常用品",
+  "節慶活動",
+  "可以運動的地方",
+  "常見職業",
+  "會用到電的物品",
+  "讓人開心的事情",
+];
+
 const state = {
   colorCards: loadColorCards(),
   selectedColorIndex: 0,
@@ -131,6 +161,21 @@ const state = {
   shadowScore: 0,
   shadowRound: 0,
   shadowAnswered: false,
+  bombTopic: "",
+  bombTimerId: null,
+  bombIntervalId: null,
+  bombRunning: false,
+  bombDuration: 0,
+  bombStartedAt: 0,
+  countdownQuestions: [],
+  countdownQueue: [],
+  countdownSeenCount: 0,
+  countdownDuration: 15,
+  countdownTimerId: null,
+  countdownStartedAt: 0,
+  countdownRunning: false,
+  countdownCurrentQuestion: "",
+  countdownTargetNumber: 5,
 };
 
 const tabs = document.querySelectorAll(".tab-button");
@@ -174,6 +219,38 @@ const shadowOptions = document.querySelector("#shadowOptions");
 const shadowFeedback = document.querySelector("#shadowFeedback");
 const shadowScore = document.querySelector("#shadowScore");
 const shadowRound = document.querySelector("#shadowRound");
+const bombNewTopic = document.querySelector("#bombNewTopic");
+const bombReset = document.querySelector("#bombReset");
+const bombStage = document.querySelector("#bombStage");
+const bombStatus = document.querySelector("#bombStatus");
+const bombDebugTime = document.querySelector("#bombDebugTime");
+const bombTopicText = document.querySelector("#bombTopicText");
+const bombStart = document.querySelector("#bombStart");
+const bombResult = document.querySelector("#bombResult");
+const bombPenaltyText = document.querySelector("#bombPenaltyText");
+const bombTopicsInput = document.querySelector("#bombTopicsInput");
+const bombMinInput = document.querySelector("#bombMinInput");
+const bombMaxInput = document.querySelector("#bombMaxInput");
+const bombPenaltiesInput = document.querySelector("#bombPenaltiesInput");
+const countdownStartSet = document.querySelector("#countdownStartSet");
+const countdownResetAll = document.querySelector("#countdownResetAll");
+const countdownQuestionsInput = document.querySelector("#countdownQuestionsInput");
+const countdownSecondsInput = document.querySelector("#countdownSecondsInput");
+const countdownOrderInput = document.querySelector("#countdownOrderInput");
+const countdownTargetMin = document.querySelector("#countdownTargetMin");
+const countdownTargetMax = document.querySelector("#countdownTargetMax");
+const countdownRepeatInput = document.querySelector("#countdownRepeatInput");
+const countdownStage = document.querySelector("#countdownStage");
+const countdownProgress = document.querySelector("#countdownProgress");
+const countdownTimer = document.querySelector("#countdownTimer");
+const countdownMeterFill = document.querySelector("#countdownMeterFill");
+const countdownQuestion = document.querySelector("#countdownQuestion");
+const countdownTarget = document.querySelector("#countdownTarget");
+const countdownRun = document.querySelector("#countdownRun");
+const countdownDone = document.querySelector("#countdownDone");
+const countdownNext = document.querySelector("#countdownNext");
+const countdownRetry = document.querySelector("#countdownRetry");
+const countdownFeedback = document.querySelector("#countdownFeedback");
 
 function createId() {
   if (globalThis.crypto?.randomUUID) {
@@ -737,6 +814,267 @@ function resetHandShadowGame() {
   showNextShadowQuestion();
 }
 
+function initBombGame() {
+  bombTopicsInput.value = defaultBombTopics.join("\n");
+  bombPenaltiesInput.value = defaultBombPenalties.join("\n");
+  resetBombGame();
+}
+
+function getFlexibleList(value, fallback) {
+  const items = String(value ?? "")
+    .split(/[\n,，]+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+  return items.length ? items : fallback;
+}
+
+function getNumber(value, fallback, min, max = Number.POSITIVE_INFINITY) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) {
+    return fallback;
+  }
+  return Math.min(max, Math.max(min, number));
+}
+
+function randomInt(min, max) {
+  const floorMin = Math.ceil(min);
+  const floorMax = Math.floor(max);
+  return Math.floor(Math.random() * (floorMax - floorMin + 1)) + floorMin;
+}
+
+function pickBombTopic() {
+  if (state.bombRunning) {
+    return;
+  }
+
+  const topics = getFlexibleList(bombTopicsInput.value, defaultBombTopics);
+  state.bombTopic = shuffle(topics)[0];
+  bombTopicText.textContent = state.bombTopic;
+  bombStatus.textContent = "題目準備好了";
+  bombDebugTime.textContent = "-- 秒";
+  bombResult.hidden = true;
+  bombStage.classList.remove("running", "urgent", "exploded");
+  bombStart.disabled = false;
+}
+
+function startBombGame() {
+  if (state.bombRunning) {
+    return;
+  }
+
+  if (!state.bombTopic) {
+    pickBombTopic();
+  }
+
+  const minSeconds = getNumber(bombMinInput.value, 15, 3);
+  const maxSeconds = Math.max(getNumber(bombMaxInput.value, 35, 4), minSeconds);
+  state.bombDuration = randomInt(minSeconds, maxSeconds) * 1000;
+  state.bombStartedAt = Date.now();
+  state.bombRunning = true;
+
+  bombResult.hidden = true;
+  bombStart.disabled = true;
+  bombNewTopic.disabled = true;
+  bombStatus.textContent = "炸彈倒數中";
+  bombStage.classList.remove("exploded");
+  bombStage.classList.add("running");
+  updateBombTimer();
+
+  state.bombIntervalId = window.setInterval(updateBombTimer, 100);
+  state.bombTimerId = window.setTimeout(explodeBomb, state.bombDuration);
+}
+
+function updateBombTimer() {
+  const elapsed = Date.now() - state.bombStartedAt;
+  const remaining = Math.max(0, state.bombDuration - elapsed);
+  const remainingSeconds = Math.ceil(remaining / 1000);
+  bombDebugTime.textContent = `${remainingSeconds} 秒`;
+  bombStage.classList.toggle("urgent", state.bombRunning && remainingSeconds <= 5);
+}
+
+function explodeBomb() {
+  if (!state.bombRunning) {
+    return;
+  }
+
+  window.clearTimeout(state.bombTimerId);
+  window.clearInterval(state.bombIntervalId);
+  state.bombTimerId = null;
+  state.bombIntervalId = null;
+  state.bombRunning = false;
+
+  const penalties = getFlexibleList(bombPenaltiesInput.value, defaultBombPenalties);
+  bombPenaltyText.textContent = shuffle(penalties)[0];
+  bombStatus.textContent = "Boom";
+  bombDebugTime.textContent = "0 秒";
+  bombResult.hidden = false;
+  bombStage.classList.remove("running", "urgent");
+  bombStage.classList.add("exploded");
+  bombNewTopic.disabled = false;
+}
+
+function resetBombGame() {
+  window.clearTimeout(state.bombTimerId);
+  window.clearInterval(state.bombIntervalId);
+  state.bombTimerId = null;
+  state.bombIntervalId = null;
+  state.bombRunning = false;
+  state.bombTopic = "";
+  bombTopicText.textContent = "請點擊隨機出題";
+  bombStatus.textContent = "Ready";
+  bombDebugTime.textContent = "-- 秒";
+  bombResult.hidden = true;
+  bombStart.disabled = true;
+  bombNewTopic.disabled = false;
+  bombStage.classList.remove("running", "urgent", "exploded");
+}
+
+function initCountdownGame() {
+  countdownQuestionsInput.value = defaultCountdownQuestions.join("\n");
+  resetCountdownAll();
+}
+
+function prepareCountdownChallenge() {
+  stopCountdownTimer();
+  state.countdownQuestions = getFlexibleList(countdownQuestionsInput.value, defaultCountdownQuestions);
+  state.countdownQueue = buildCountdownQueue();
+  state.countdownSeenCount = 0;
+  countdownFeedback.textContent = "題庫已準備好";
+  showNextCountdownQuestion();
+}
+
+function buildCountdownQueue() {
+  const indices = state.countdownQuestions.map((_, index) => index);
+  return countdownOrderInput.value === "random" ? shuffle(indices) : indices;
+}
+
+function showNextCountdownQuestion() {
+  stopCountdownTimer();
+
+  if (!state.countdownQueue.length) {
+    if (!countdownRepeatInput.checked && state.countdownSeenCount > 0) {
+      finishCountdownSet();
+      return;
+    }
+    state.countdownQueue = buildCountdownQueue();
+  }
+
+  const nextIndex = countdownOrderInput.value === "random" ? state.countdownQueue.pop() : state.countdownQueue.shift();
+  state.countdownCurrentQuestion = state.countdownQuestions[nextIndex];
+  state.countdownSeenCount += 1;
+  state.countdownDuration = getNumber(countdownSecondsInput.value, 15, 5, 600);
+  state.countdownTargetNumber = getCountdownTargetNumber();
+
+  countdownStage.classList.remove("urgent");
+  countdownQuestion.textContent = state.countdownCurrentQuestion;
+  countdownTarget.textContent = state.countdownTargetNumber;
+  countdownTimer.textContent = `${state.countdownDuration.toFixed(1)} 秒`;
+  countdownMeterFill.style.width = "100%";
+  countdownProgress.textContent = countdownRepeatInput.checked
+    ? `第 ${state.countdownSeenCount} 題`
+    : `${state.countdownSeenCount} / ${state.countdownQuestions.length}`;
+  countdownFeedback.textContent = "準備好後按開始";
+  setCountdownButtons("ready");
+}
+
+function getCountdownTargetNumber() {
+  const minTarget = getNumber(countdownTargetMin.value, 3, 1, 99);
+  const maxTarget = Math.max(getNumber(countdownTargetMax.value, 5, 1, 99), minTarget);
+  return randomInt(minTarget, maxTarget);
+}
+
+function startCountdownTimer() {
+  if (state.countdownRunning || !state.countdownCurrentQuestion) {
+    return;
+  }
+
+  state.countdownRunning = true;
+  state.countdownStartedAt = Date.now();
+  countdownFeedback.textContent = "開始聯想";
+  countdownStage.classList.remove("urgent");
+  setCountdownButtons("running");
+  updateCountdownTimer();
+  state.countdownTimerId = window.setInterval(updateCountdownTimer, 80);
+}
+
+function updateCountdownTimer() {
+  const elapsedSeconds = (Date.now() - state.countdownStartedAt) / 1000;
+  const remaining = Math.max(0, state.countdownDuration - elapsedSeconds);
+  const percent = Math.max(0, (remaining / state.countdownDuration) * 100);
+  countdownTimer.textContent = `${remaining.toFixed(1)} 秒`;
+  countdownMeterFill.style.width = `${percent}%`;
+  countdownStage.classList.toggle("urgent", remaining <= 5);
+
+  if (remaining <= 0) {
+    finishCountdownRound(false);
+  }
+}
+
+function finishCountdownRound(isSuccess) {
+  if (!state.countdownRunning && !isSuccess) {
+    return;
+  }
+
+  stopCountdownTimer();
+  countdownFeedback.textContent = isSuccess ? "完成了，換下一題" : "時間到，可以重來或換題";
+  countdownTimer.textContent = isSuccess ? countdownTimer.textContent : "0.0 秒";
+  countdownMeterFill.style.width = isSuccess ? countdownMeterFill.style.width : "0%";
+  countdownStage.classList.toggle("urgent", !isSuccess);
+  setCountdownButtons("finished");
+}
+
+function stopCountdownTimer() {
+  window.clearInterval(state.countdownTimerId);
+  state.countdownTimerId = null;
+  state.countdownRunning = false;
+}
+
+function retryCountdownQuestion() {
+  stopCountdownTimer();
+  state.countdownDuration = getNumber(countdownSecondsInput.value, 15, 5, 600);
+  countdownStage.classList.remove("urgent");
+  countdownTimer.textContent = `${state.countdownDuration.toFixed(1)} 秒`;
+  countdownMeterFill.style.width = "100%";
+  countdownFeedback.textContent = "再挑戰一次";
+  setCountdownButtons("ready");
+}
+
+function finishCountdownSet() {
+  state.countdownCurrentQuestion = "";
+  countdownQuestion.textContent = "完成";
+  countdownTarget.textContent = "-";
+  countdownTimer.textContent = "0.0 秒";
+  countdownMeterFill.style.width = "0%";
+  countdownFeedback.textContent = "這組題目已全部完成";
+  countdownStage.classList.remove("urgent");
+  setCountdownButtons("complete");
+}
+
+function resetCountdownAll() {
+  stopCountdownTimer();
+  state.countdownQuestions = getFlexibleList(countdownQuestionsInput.value, defaultCountdownQuestions);
+  state.countdownQueue = [];
+  state.countdownSeenCount = 0;
+  state.countdownCurrentQuestion = "";
+  state.countdownDuration = getNumber(countdownSecondsInput.value, 15, 5, 600);
+  countdownProgress.textContent = "1 / 1";
+  countdownTimer.textContent = `${state.countdownDuration.toFixed(1)} 秒`;
+  countdownMeterFill.style.width = "100%";
+  countdownQuestion.textContent = "準備";
+  countdownTarget.textContent = getCountdownTargetNumber();
+  countdownFeedback.textContent = "設定完成後開始挑戰";
+  countdownStage.classList.remove("urgent");
+  setCountdownButtons("idle");
+}
+
+function setCountdownButtons(mode) {
+  countdownRun.hidden = !["ready", "idle"].includes(mode);
+  countdownRun.disabled = mode === "idle";
+  countdownDone.hidden = mode !== "running";
+  countdownNext.hidden = mode !== "finished";
+  countdownRetry.hidden = mode !== "finished";
+}
+
 function shuffle(items) {
   const next = [...items];
   for (let index = next.length - 1; index > 0; index -= 1) {
@@ -812,8 +1150,19 @@ peekMemory.addEventListener("click", peekAllCards);
 resetMemory.addEventListener("click", resetMemoryGame);
 nextShadowQuestion.addEventListener("click", showNextShadowQuestion);
 resetShadowGame.addEventListener("click", resetHandShadowGame);
+bombNewTopic.addEventListener("click", pickBombTopic);
+bombStart.addEventListener("click", startBombGame);
+bombReset.addEventListener("click", resetBombGame);
+countdownStartSet.addEventListener("click", prepareCountdownChallenge);
+countdownResetAll.addEventListener("click", resetCountdownAll);
+countdownRun.addEventListener("click", startCountdownTimer);
+countdownDone.addEventListener("click", () => finishCountdownRound(true));
+countdownNext.addEventListener("click", showNextCountdownQuestion);
+countdownRetry.addEventListener("click", retryCountdownQuestion);
 
 renderColorGrid();
 renderMemoryBoard();
 updateSetup();
 resetHandShadowGame();
+initBombGame();
+initCountdownGame();
