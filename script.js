@@ -144,6 +144,185 @@ const defaultCountdownQuestions = [
   "讓人開心的事情",
 ];
 
+const cityGuessItems = [
+  {
+    answer: "臺北市",
+    region: "north",
+    note: "臺北是臺灣首都圈核心，常被想到捷運、101 與豐富的藝文場館。",
+    clues: [
+      { icon: "樓", label: "101" },
+      { icon: "捷", label: "捷運" },
+      { icon: "館", label: "故宮" },
+      { icon: "夜", label: "夜市" },
+    ],
+  },
+  {
+    answer: "新北市",
+    region: "north",
+    note: "新北環繞臺北市，山海景點很多，九份、淡水、平溪都很有代表性。",
+    clues: [
+      { icon: "山", label: "九份" },
+      { icon: "河", label: "淡水" },
+      { icon: "燈", label: "平溪" },
+      { icon: "橋", label: "大橋" },
+    ],
+  },
+  {
+    answer: "桃園市",
+    region: "north",
+    note: "桃園有國際機場，也是北臺灣重要交通與產業城市。",
+    clues: [
+      { icon: "機", label: "機場" },
+      { icon: "埤", label: "埤塘" },
+      { icon: "客", label: "客庄" },
+      { icon: "花", label: "花彩" },
+    ],
+  },
+  {
+    answer: "新竹市",
+    region: "north",
+    note: "新竹常被稱作風城，也以科學園區、玻璃工藝與米粉聞名。",
+    clues: [
+      { icon: "風", label: "風城" },
+      { icon: "晶", label: "科學園區" },
+      { icon: "粉", label: "米粉" },
+      { icon: "玻", label: "玻璃" },
+    ],
+  },
+  {
+    answer: "臺中市",
+    region: "central",
+    note: "臺中位於中臺灣，歌劇院、高美濕地與珍珠奶茶都很常被聯想到。",
+    clues: [
+      { icon: "劇", label: "歌劇院" },
+      { icon: "濕", label: "高美濕地" },
+      { icon: "茶", label: "珍奶" },
+      { icon: "花", label: "花博" },
+    ],
+  },
+  {
+    answer: "彰化縣",
+    region: "central",
+    note: "彰化以八卦山大佛、鹿港老街與扇形車庫等景點知名。",
+    clues: [
+      { icon: "佛", label: "大佛" },
+      { icon: "鹿", label: "鹿港" },
+      { icon: "扇", label: "車庫" },
+      { icon: "肉", label: "肉圓" },
+    ],
+  },
+  {
+    answer: "南投縣",
+    region: "central",
+    note: "南投是臺灣唯一不靠海的縣，日月潭與清境農場都很有代表性。",
+    clues: [
+      { icon: "湖", label: "日月潭" },
+      { icon: "羊", label: "清境" },
+      { icon: "茶", label: "茶園" },
+      { icon: "峰", label: "合歡山" },
+    ],
+  },
+  {
+    answer: "嘉義縣",
+    region: "south",
+    note: "嘉義縣有阿里山森林鐵路、日出與茶園，也是很經典的山林印象。",
+    clues: [
+      { icon: "山", label: "阿里山" },
+      { icon: "鐵", label: "森林鐵路" },
+      { icon: "日", label: "日出" },
+      { icon: "茶", label: "高山茶" },
+    ],
+  },
+  {
+    answer: "臺南市",
+    region: "south",
+    note: "臺南是古都，以古蹟、小吃、鹽田與豐富廟宇文化聞名。",
+    clues: [
+      { icon: "城", label: "古都" },
+      { icon: "吃", label: "小吃" },
+      { icon: "鹽", label: "鹽田" },
+      { icon: "廟", label: "廟宇" },
+    ],
+  },
+  {
+    answer: "高雄市",
+    region: "south",
+    note: "高雄是南臺灣大城，港口、捷運、愛河與駁二是常見線索。",
+    clues: [
+      { icon: "港", label: "港口" },
+      { icon: "河", label: "愛河" },
+      { icon: "駁", label: "駁二" },
+      { icon: "捷", label: "捷運" },
+    ],
+  },
+  {
+    answer: "屏東縣",
+    region: "south",
+    note: "屏東位在臺灣最南端，墾丁、海洋、熱帶水果與落山風都很有代表性。",
+    clues: [
+      { icon: "海", label: "墾丁" },
+      { icon: "果", label: "水果" },
+      { icon: "燈", label: "鵝鑾鼻" },
+      { icon: "風", label: "落山風" },
+    ],
+  },
+  {
+    answer: "宜蘭縣",
+    region: "east",
+    note: "宜蘭以蘭陽平原、溫泉、童玩節與龜山島等特色受到喜愛。",
+    clues: [
+      { icon: "泉", label: "溫泉" },
+      { icon: "龜", label: "龜山島" },
+      { icon: "雨", label: "多雨" },
+      { icon: "玩", label: "童玩節" },
+    ],
+  },
+  {
+    answer: "花蓮縣",
+    region: "east",
+    note: "花蓮有壯麗山海景觀，太魯閣、七星潭與石材都是常見印象。",
+    clues: [
+      { icon: "峽", label: "太魯閣" },
+      { icon: "海", label: "七星潭" },
+      { icon: "石", label: "石材" },
+      { icon: "山", label: "山海" },
+    ],
+  },
+  {
+    answer: "臺東縣",
+    region: "east",
+    note: "臺東有熱氣球、稻田、海岸與多元原民文化，是東臺灣慢活代表。",
+    clues: [
+      { icon: "球", label: "熱氣球" },
+      { icon: "稻", label: "池上" },
+      { icon: "浪", label: "海岸" },
+      { icon: "舞", label: "原民文化" },
+    ],
+  },
+  {
+    answer: "澎湖縣",
+    region: "island",
+    note: "澎湖以海島風景、花火節、玄武岩與跨海大橋聞名。",
+    clues: [
+      { icon: "島", label: "群島" },
+      { icon: "火", label: "花火節" },
+      { icon: "岩", label: "玄武岩" },
+      { icon: "橋", label: "跨海大橋" },
+    ],
+  },
+  {
+    answer: "金門縣",
+    region: "island",
+    note: "金門有戰地文化、風獅爺、高粱與閩南聚落等特色。",
+    clues: [
+      { icon: "堡", label: "戰地" },
+      { icon: "獅", label: "風獅爺" },
+      { icon: "酒", label: "高粱" },
+      { icon: "厝", label: "古厝" },
+    ],
+  },
+];
+
 const state = {
   colorCards: loadColorCards(),
   selectedColorIndex: 0,
@@ -176,6 +355,10 @@ const state = {
   countdownRunning: false,
   countdownCurrentQuestion: "",
   countdownTargetNumber: 5,
+  cityCurrent: null,
+  cityScore: 0,
+  cityRound: 0,
+  cityAnswered: false,
 };
 
 const tabs = document.querySelectorAll(".tab-button");
@@ -251,6 +434,21 @@ const countdownDone = document.querySelector("#countdownDone");
 const countdownNext = document.querySelector("#countdownNext");
 const countdownRetry = document.querySelector("#countdownRetry");
 const countdownFeedback = document.querySelector("#countdownFeedback");
+const nextCityQuestion = document.querySelector("#nextCityQuestion");
+const resetCityGuess = document.querySelector("#resetCityGuess");
+const cityRegionLabel = document.querySelector("#cityRegionLabel");
+const cityRoundLabel = document.querySelector("#cityRoundLabel");
+const cityMysteryTitle = document.querySelector("#cityMysteryTitle");
+const cityHintText = document.querySelector("#cityHintText");
+const cityClues = document.querySelector("#cityClues");
+const cityReveal = document.querySelector("#cityReveal");
+const cityAnswerName = document.querySelector("#cityAnswerName");
+const cityAnswerNote = document.querySelector("#cityAnswerNote");
+const cityScore = document.querySelector("#cityScore");
+const cityRound = document.querySelector("#cityRound");
+const cityRegionSelect = document.querySelector("#cityRegionSelect");
+const cityOptions = document.querySelector("#cityOptions");
+const cityFeedback = document.querySelector("#cityFeedback");
 
 function createId() {
   if (globalThis.crypto?.randomUUID) {
@@ -1075,6 +1273,133 @@ function setCountdownButtons(mode) {
   countdownRetry.hidden = mode !== "finished";
 }
 
+function showNextCityQuestion() {
+  const pool = getCityPool();
+  const previousAnswer = state.cityCurrent?.answer;
+  const candidates = pool.filter((item) => item.answer !== previousAnswer);
+  state.cityCurrent = shuffle(candidates.length ? candidates : pool)[0];
+  state.cityRound += 1;
+  state.cityAnswered = false;
+  renderCityQuestion();
+}
+
+function getCityPool() {
+  const region = cityRegionSelect.value;
+  const pool = region === "all" ? cityGuessItems : cityGuessItems.filter((item) => item.region === region);
+  return pool.length ? pool : cityGuessItems;
+}
+
+function renderCityQuestion() {
+  const current = state.cityCurrent;
+  const options = buildCityOptions(current.answer);
+
+  cityRegionLabel.textContent = getCityRegionLabel(cityRegionSelect.value);
+  cityRoundLabel.textContent = `第 ${state.cityRound} 題`;
+  cityMysteryTitle.textContent = "猜猜我是誰";
+  cityHintText.textContent = "觀察四個線索，選出最可能的縣市。";
+  cityScore.textContent = state.cityScore;
+  cityRound.textContent = state.cityRound;
+  cityFeedback.textContent = "請選一個答案";
+  cityReveal.hidden = true;
+  cityAnswerName.textContent = "";
+  cityAnswerNote.textContent = "";
+
+  cityClues.innerHTML = "";
+  current.clues.forEach((clue) => {
+    const card = document.createElement("div");
+    card.className = "city-clue-card";
+
+    const icon = document.createElement("span");
+    icon.className = "city-clue-icon";
+    icon.textContent = clue.icon;
+
+    const label = document.createElement("strong");
+    label.textContent = clue.label;
+
+    card.append(icon, label);
+    cityClues.append(card);
+  });
+
+  cityOptions.innerHTML = "";
+  options.forEach((answer) => {
+    const button = document.createElement("button");
+    button.className = "city-option-button";
+    button.type = "button";
+    button.textContent = answer;
+    button.addEventListener("click", () => checkCityAnswer(button, answer));
+    cityOptions.append(button);
+  });
+}
+
+function buildCityOptions(correctAnswer) {
+  const regionPool = getCityPool()
+    .filter((item) => item.answer !== correctAnswer)
+    .map((item) => item.answer);
+  const fallbackPool = cityGuessItems
+    .filter((item) => item.answer !== correctAnswer && !regionPool.includes(item.answer))
+    .map((item) => item.answer);
+  return shuffle([correctAnswer, ...shuffle([...regionPool, ...fallbackPool]).slice(0, 3)]);
+}
+
+function checkCityAnswer(button, answer) {
+  if (state.cityAnswered) {
+    return;
+  }
+
+  if (answer !== state.cityCurrent.answer) {
+    button.classList.add("wrong");
+    button.disabled = true;
+    cityFeedback.textContent = "再觀察線索，還可以再猜";
+    return;
+  }
+
+  state.cityAnswered = true;
+  state.cityScore += 1;
+  cityScore.textContent = state.cityScore;
+  cityFeedback.textContent = "答對了";
+  cityMysteryTitle.textContent = state.cityCurrent.answer;
+  cityHintText.textContent = "線索全部對上了。";
+  cityAnswerName.textContent = state.cityCurrent.answer;
+  cityAnswerNote.textContent = state.cityCurrent.note;
+  cityReveal.hidden = false;
+
+  document.querySelectorAll(".city-option-button").forEach((item) => {
+    item.disabled = true;
+    item.classList.toggle("correct", item.textContent === answer);
+  });
+}
+
+function getCityRegionLabel(region) {
+  const labels = {
+    all: "全臺縣市",
+    north: "北部挑戰",
+    central: "中部挑戰",
+    south: "南部挑戰",
+    east: "東部挑戰",
+    island: "離島挑戰",
+  };
+  return labels[region] ?? labels.all;
+}
+
+function resetCityGuessGame() {
+  state.cityScore = 0;
+  state.cityRound = 0;
+  state.cityCurrent = null;
+  state.cityAnswered = false;
+  cityScore.textContent = "0";
+  cityRound.textContent = "0";
+  cityRoundLabel.textContent = "第 1 題";
+  cityRegionLabel.textContent = "請選擇挑戰的縣市";
+  cityMysteryTitle.textContent = "猜猜我是誰";
+  cityHintText.textContent = "按下抽一題後，觀察四個線索再選答案。";
+  cityReveal.hidden = true;
+  cityAnswerName.textContent = "";
+  cityAnswerNote.textContent = "";
+  cityFeedback.textContent = "先抽一題開始挑戰";
+  cityClues.innerHTML = "";
+  cityOptions.innerHTML = "";
+}
+
 function shuffle(items) {
   const next = [...items];
   for (let index = next.length - 1; index > 0; index -= 1) {
@@ -1159,6 +1484,9 @@ countdownRun.addEventListener("click", startCountdownTimer);
 countdownDone.addEventListener("click", () => finishCountdownRound(true));
 countdownNext.addEventListener("click", showNextCountdownQuestion);
 countdownRetry.addEventListener("click", retryCountdownQuestion);
+nextCityQuestion.addEventListener("click", showNextCityQuestion);
+resetCityGuess.addEventListener("click", resetCityGuessGame);
+cityRegionSelect.addEventListener("change", resetCityGuessGame);
 
 renderColorGrid();
 renderMemoryBoard();
@@ -1166,3 +1494,4 @@ updateSetup();
 resetHandShadowGame();
 initBombGame();
 initCountdownGame();
+resetCityGuessGame();

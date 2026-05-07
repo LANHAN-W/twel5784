@@ -37,6 +37,10 @@
             <span aria-hidden="true">◷</span>
             倒數挑戰
           </button>
+          <button class="tab-button" type="button" data-tab="cityGuessGame">
+            <span aria-hidden="true">⌖</span>
+            縣市猜猜
+          </button>
         </nav>
       </header>
 
@@ -375,6 +379,76 @@
             </div>
             <p class="shadow-feedback" id="countdownFeedback">設定完成後開始挑戰</p>
           </section>
+        </div>
+
+        <p class="developer-credit">
+          <img src="./assets/logo.png" alt="" aria-hidden="true" />
+          <span>開發者：社團法人臺灣專長培訓及友善生活推廣發展協會</span>
+        </p>
+      </section>
+
+      <section class="game-panel" id="cityGuessGame" aria-labelledby="cityGuessGameTitle">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">City Guess</p>
+            <h2 id="cityGuessGameTitle">猜猜我是誰</h2>
+          </div>
+          <div class="actions">
+            <button class="primary-button" type="button" id="nextCityQuestion">抽一題</button>
+            <button class="icon-button" type="button" id="resetCityGuess" aria-label="重置縣市猜猜我是誰" title="重置">
+              ↻
+            </button>
+          </div>
+        </div>
+
+        <div class="city-guess-layout">
+          <section class="city-stage" id="cityStage" aria-live="polite">
+            <div class="city-card">
+              <div class="city-card-topline">
+                <span id="cityRegionLabel">請選擇挑戰的縣市</span>
+                <span id="cityRoundLabel">第 1 題</span>
+              </div>
+              <div class="city-mystery">
+                <span class="city-map-mark" aria-hidden="true">⌖</span>
+                <strong id="cityMysteryTitle">猜猜我是誰</strong>
+                <p id="cityHintText">按下抽一題後，觀察四個線索再選答案。</p>
+              </div>
+              <div class="city-clues" id="cityClues" aria-label="縣市線索"></div>
+              <div class="city-reveal" id="cityReveal" hidden>
+                <span>答案</span>
+                <strong id="cityAnswerName"></strong>
+                <p id="cityAnswerNote"></p>
+              </div>
+            </div>
+          </section>
+
+          <aside class="city-answer-panel">
+            <div class="counter-strip">
+              <div>
+                <span class="metric" id="cityScore">0</span>
+                <span class="metric-label">答對</span>
+              </div>
+              <div>
+                <span class="metric" id="cityRound">0</span>
+                <span class="metric-label">題目</span>
+              </div>
+            </div>
+
+            <label class="field">
+              <span>挑戰範圍</span>
+              <select id="cityRegionSelect">
+                <option value="all">全臺縣市</option>
+                <option value="north">北部</option>
+                <option value="central">中部</option>
+                <option value="south">南部</option>
+                <option value="east">東部</option>
+                <option value="island">離島</option>
+              </select>
+            </label>
+
+            <div class="city-options" id="cityOptions" aria-label="縣市答案選項"></div>
+            <p class="shadow-feedback" id="cityFeedback">先抽一題開始挑戰</p>
+          </aside>
         </div>
 
         <p class="developer-credit">
