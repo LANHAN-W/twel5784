@@ -585,6 +585,9 @@ const cityAnswerNote = document.querySelector("#cityAnswerNote");
 const cityScore = document.querySelector("#cityScore");
 const cityRound = document.querySelector("#cityRound");
 const cityRegionSelect = document.querySelector("#cityRegionSelect");
+const guessThemeHelp = document.querySelector("#guessThemeHelp");
+const toggleCustomGuess = document.querySelector("#toggleCustomGuess");
+const customGuessEditor = document.querySelector("#customGuessEditor");
 const customGuessInput = document.querySelector("#customGuessInput");
 const saveCustomGuess = document.querySelector("#saveCustomGuess");
 const clearCustomGuess = document.querySelector("#clearCustomGuess");
@@ -1540,13 +1543,36 @@ function checkCityAnswer(button, answer) {
 function getCityRegionLabel(region) {
   const labels = {
     all: "全部主題",
-    city: "臺灣縣市",
-    animal: "動物主題",
-    job: "職業主題",
-    object: "生活用品",
-    custom: "自訂題庫",
+    city: "猜地名",
+    animal: "猜動物",
+    job: "猜職業",
+    object: "猜生活用品",
+    custom: "猜自訂主題",
   };
   return labels[region] ?? labels.all;
+}
+
+function getGuessThemeHelp(region) {
+  const descriptions = {
+    all: "目前會混合地名、動物、職業與生活用品題目。",
+    city: "猜地名：答案會是臺灣縣市，線索可能是景點、食物、地標或地方特色。",
+    animal: "猜動物：答案會是動物，線索會提示外型、生活環境、動作或習性。",
+    job: "猜職業：答案會是工作角色，線索會提示工具、工作場域或服務內容。",
+    object: "猜生活用品：答案會是日常物品，線索會提示用途、外觀或使用情境。",
+    custom: "猜自訂主題：可放入職業、地名、動物、課程概念或你想教的任何主題。",
+  };
+  return descriptions[region] ?? descriptions.all;
+}
+
+function updateGuessThemeHelp() {
+  guessThemeHelp.textContent = getGuessThemeHelp(cityRegionSelect.value);
+}
+
+function setCustomGuessEditorOpen(isOpen) {
+  customGuessEditor.hidden = !isOpen;
+  toggleCustomGuess.setAttribute("aria-expanded", String(isOpen));
+  toggleCustomGuess.classList.toggle("active", isOpen);
+  toggleCustomGuess.textContent = isOpen ? "收起自訂主題" : "編輯自訂主題";
 }
 
 function parseCustomGuessText(text) {
@@ -1648,6 +1674,7 @@ function resetCityGuessGame() {
   cityFeedback.textContent = "先抽一題開始挑戰";
   cityClues.innerHTML = "";
   cityOptions.innerHTML = "";
+  updateGuessThemeHelp();
 }
 
 function shuffle(items) {
@@ -1737,6 +1764,9 @@ countdownRetry.addEventListener("click", retryCountdownQuestion);
 nextCityQuestion.addEventListener("click", showNextCityQuestion);
 resetCityGuess.addEventListener("click", resetCityGuessGame);
 cityRegionSelect.addEventListener("change", resetCityGuessGame);
+toggleCustomGuess.addEventListener("click", () => {
+  setCustomGuessEditorOpen(customGuessEditor.hidden);
+});
 saveCustomGuess.addEventListener("click", saveCustomGuessItems);
 clearCustomGuess.addEventListener("click", clearCustomGuessItems);
 
@@ -1747,4 +1777,5 @@ resetHandShadowGame();
 initBombGame();
 initCountdownGame();
 initCustomGuessSettings();
+setCustomGuessEditorOpen(false);
 resetCityGuessGame();

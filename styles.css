@@ -1390,6 +1390,43 @@ output {
   min-height: 126px;
 }
 
+.guess-theme-help {
+  margin: -4px 0 0;
+  padding: 10px 12px;
+  color: #4f587d;
+  background: #eef1ff;
+  border: 1px solid rgba(91, 97, 200, 0.14);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.custom-topic-toggle {
+  width: 100%;
+  min-height: 44px;
+  color: #30356f;
+  background: #e8ecff;
+}
+
+.custom-topic-toggle.active {
+  color: #fff;
+  background: #5b61c8;
+}
+
+.custom-guess-editor {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(91, 97, 200, 0.18);
+  border-radius: 8px;
+}
+
+.custom-guess-editor[hidden] {
+  display: none;
+}
+
 .custom-guess-tools {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

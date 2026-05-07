@@ -438,27 +438,36 @@
               <span>主題類別</span>
               <select id="cityRegionSelect">
                 <option value="all">全部主題</option>
-                <option value="city">臺灣縣市</option>
-                <option value="animal">動物</option>
-                <option value="job">職業</option>
-                <option value="object">生活用品</option>
-                <option value="custom">自訂題庫</option>
+                <option value="city">猜地名：臺灣縣市</option>
+                <option value="animal">猜動物</option>
+                <option value="job">猜職業</option>
+                <option value="object">猜生活用品</option>
+                <option value="custom">猜自訂主題</option>
               </select>
             </label>
+            <p class="guess-theme-help" id="guessThemeHelp">目前會混合地名、動物、職業與生活用品題目。</p>
 
-            <label class="field">
-              <span>自訂題庫</span>
-              <textarea
-                id="customGuessInput"
-                rows="5"
-                placeholder="答案｜線索一,線索二,線索三,線索四｜答案說明"
-              ></textarea>
-            </label>
-            <div class="custom-guess-tools">
-              <button class="secondary-button" type="button" id="saveCustomGuess">儲存題庫</button>
-              <button class="secondary-button" type="button" id="clearCustomGuess">清除</button>
+            <button class="secondary-button custom-topic-toggle" type="button" id="toggleCustomGuess" aria-expanded="false" aria-controls="customGuessEditor">
+              編輯自訂主題
+            </button>
+            <div class="custom-guess-editor" id="customGuessEditor" hidden>
+              <label class="field">
+                <span>自訂題庫</span>
+                <textarea
+                  id="customGuessInput"
+                  rows="5"
+                  placeholder="答案｜線索一,線索二,線索三,線索四｜答案說明"
+                ></textarea>
+              </label>
+              <p class="guess-theme-help">
+                可做職業、地名、動物、生活常識或課程主題；一列一題，例如：護理師｜照護,醫院,量血壓,制服｜在醫療場域照顧病人。
+              </p>
+              <div class="custom-guess-tools">
+                <button class="secondary-button" type="button" id="saveCustomGuess">儲存題庫</button>
+                <button class="secondary-button" type="button" id="clearCustomGuess">清除</button>
+              </div>
+              <span class="save-state" id="customGuessStatus">尚未建立自訂題庫</span>
             </div>
-            <span class="save-state" id="customGuessStatus">尚未建立自訂題庫</span>
 
             <div class="city-options" id="cityOptions" aria-label="答案選項"></div>
             <p class="shadow-feedback" id="cityFeedback">先抽一題開始挑戰</p>
